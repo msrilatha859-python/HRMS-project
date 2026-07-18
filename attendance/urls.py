@@ -3,7 +3,7 @@ from .views import EmployeeViewSet, AttendanceViewSet
 
 router = DefaultRouter()
 router.register('employees', EmployeeViewSet)
-router.register('attendence', AttendanceViewSet)
+router.register('attendance', AttendanceViewSet)
 
 urlpatterns = router.urls
 

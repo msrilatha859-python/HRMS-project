@@ -41,9 +41,9 @@ class Employee(models.Model):
         default="Active"
     )
     def __str__(self):
-        return f"{self.employee_id} - {self.name}"
-  
+        return f"{self.employee_id} - {self.name}"   
 
+    
 class Attendance(models.Model):
 
     STATUS_CHOICES = (
@@ -52,32 +52,27 @@ class Attendance(models.Model):
         ("Leave", "Leave"),
         ("Late", "Late"),
     )
-
     employee = models.ForeignKey(
         Employee,
         on_delete=models.CASCADE
     )
-
     date = models.DateField(auto_now_add=True)
-
     check_in = models.TimeField(
         null=True,
         blank=True
     )
-
     check_out = models.TimeField(
         null=True,
         blank=True
     )
-    
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES
     )
-    
     def __str__(self):
         return f"{self.employee.name} - {self.date}"
-
+   
+    
     
         
         
