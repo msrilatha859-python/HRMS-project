@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import API from '../services/api'
 import { Link } from 'react-router-dom';
 
 function Employees () {
     const [employees, setEmployees] = useState([])
+    const navigate = useNavigate ();
 
     useEffect(() => {
         fetchEmployees()
@@ -13,6 +15,23 @@ function Employees () {
         const response = await API.get('employees/')
         setEmployees(response.data)
     }
+    const handleDelete = async(id) => {
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this employee?"
+        );
+
+        if (!confirmDelete) return;
+
+        try{
+            await API.delete(`employees/${id}/`);
+            alert("Employee deleted successfully!")
+            fetchEmployees();
+        } catch (error) {
+            console.log(error);
+            alert("Failed to delete employee.")
+        }
+    };
+    
     return (
         <div className='p-6'>
             <h1 className='text-3xl font-bold mb-4'>Employees</h1>
@@ -31,6 +50,7 @@ function Employees () {
             <th className=' border p-2'>Photo</th>
             <th className=' border p-2'>Employee ID</th>
             <th className="border p-2">Name</th>
+            <th className='border'>Phone</th>
             <th className="border p-2">Email</th>
             <th className="border p-2">Department</th>
             <th className=' border p-2'>Designation</th>
@@ -55,13 +75,18 @@ function Employees () {
                 </td>
                 <td className=' border p-2'>{emp.employee_id} </td>
                 <td className=' border p-2'>{emp.name} </td>
+                <td className='border p-2'>{emp.phone} </td>
                 <td className=' border p-2'>{emp.email} </td>
                 <td className=' border p-2'>{emp.department} </td>
                 <td className=' border p-2'>{emp.designation} </td>
                 <td className=' border p-2'>{emp.status} </td>
                 <td className=' border p-2'>
-                    <button className=' bg-yellow-500 text-white px-2 py-1 rounded mr-2'>Edit</button>
-                    <button className=' bg-yellow-500 text-white px-2 py-1 rounded mr-2'>Delete</button>
+                    <button onClick=
+                    {() => navigate(`/employees/edit/${emp.id}`) } 
+                    className=' bg-yellow-500 hover:bg-yellow-700 text-white px-2 py-1 rounded mr-2'>Edit</button>
+                    <button onClick={() => handleDelete(emp.id)}
+                        className='bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded ml-2'>Delete</button>
+                    
                 </td>
             </tr>
         ))}

@@ -10,6 +10,7 @@ import Reports from './pages/Reports';
 import Navbar from './components/navbar';
 import MainLayout from './layout/MainLayout';
 import AddEmployee from './pages/AddEmployee';
+import EditEmployee from './employees/EditEmployee'
 
 function Layout() {
   const location = useLocation();
@@ -32,6 +33,8 @@ function Layout() {
           <Route path='/reports' element={<ProtectRoute><MainLayout><Reports/></MainLayout></ProtectRoute>} />
           <Route path='/settings' 
           element={<ProtectRoute><MainLayout><Settings/></MainLayout></ProtectRoute>} />
+          <Route path='/employees/edit/:id'
+          element={<ProtectRoute><MainLayout><EditEmployee /></MainLayout> </ProtectRoute> } />
           
         </Routes>
 
