@@ -22,6 +22,10 @@ function Navbar() {
                     <Link to="/employees" className=" text-white hover:text-yellow-500 transition">
                         Employees
                     </Link>
+                    <Link to="/attendance/mark">
+                     Mark Attendance
+                    </Link>
+                    
                     <button onClick={handleLogout} className=" bg-red-500 hover:bg-red-700 px-4 py-3 rounded text-white">
                         Logout
                     </button>

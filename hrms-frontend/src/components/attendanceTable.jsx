@@ -1,6 +1,6 @@
 function AttendanceTable ( { records }) {
     return (
-        <table className= ' w-full boredr mt-4'>
+        <table className= ' w-full border mt-4'>
             <thead>
                 <tr>
                     <th className= 'border p-2'>Employee</th>

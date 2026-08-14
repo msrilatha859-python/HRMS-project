@@ -10,7 +10,8 @@ import Reports from './pages/Reports';
 import Navbar from './components/navbar';
 import MainLayout from './layout/MainLayout';
 import AddEmployee from './pages/AddEmployee';
-import EditEmployee from './employees/EditEmployee'
+import EditEmployee from './employees/EditEmployee';
+import MarkAttendance from "./pages/MarkAttendance";
 
 function Layout() {
   const location = useLocation();
@@ -35,6 +36,8 @@ function Layout() {
           element={<ProtectRoute><MainLayout><Settings/></MainLayout></ProtectRoute>} />
           <Route path='/employees/edit/:id'
           element={<ProtectRoute><MainLayout><EditEmployee /></MainLayout> </ProtectRoute> } />
+          <Route path='/attendance/mark'
+            element={<ProtectRoute><MainLayout><MarkAttendance/></MainLayout> </ProtectRoute> } />
           
         </Routes>
 
