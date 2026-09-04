@@ -7,7 +7,7 @@ import Attendance from './pages/Attendance';
 import Leave from './pages/Leave';
 import Settings from './pages/Settings';
 import Reports from './pages/Reports';
-import Navbar from './components/navbar';
+
 import MainLayout from './layout/MainLayout';
 import AddEmployee from './pages/AddEmployee';
 import EditEmployee from './employees/EditEmployee';
