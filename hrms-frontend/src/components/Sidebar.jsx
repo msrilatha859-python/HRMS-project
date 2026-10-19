@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { FaHome, FaUsers, FaCalendarCheck, FaClipboardList, FaChartBar, FaCog, FaSignOutAlt } from "react-icons/fa"
+import { FaHome, FaUsers, FaCalendarCheck, FaClipboardList, FaChartBar, FaCog, FaSignOutAlt, FaUserClock} from "react-icons/fa"
+
 
 function Sidebar() {
     const navigate = useNavigate();
@@ -22,6 +23,11 @@ function Sidebar() {
                 </Link>
                 <Link to='/attendance' className='flex items-center gap-3 p-3 rounded hover:bg-indigo-700'>
                     <FaCalendarCheck/>Attendance
+                </Link>
+                <Link
+                    to='/attendance/mark'
+                    className='flex item-center gap-3 p-3 rounded hover:bg-indigo-700'>
+                      <FaUserClock /> Mark Attendance
                 </Link>
                 <Link to='/leave' className='flex items-center gap-3 p-3 rounded hover:bg-indigo-700'>
                     <FaClipboardList/>Leave

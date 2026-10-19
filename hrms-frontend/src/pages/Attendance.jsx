@@ -8,6 +8,7 @@ function Attendance() {
     const [selectedEmployee, setSelectedEmployee] = useState("");
     const [selectedStatus, setSelectedStatus] = useState("");
     const [selectedDate, setSelectedDate] = useState("");
+    const [editingRecord, setEditingRecord] = useState(null);    
 
     useEffect(() => {
         fetchAttendance();
@@ -47,6 +48,66 @@ function Attendance() {
         setSelectedStatus("");
         setSelectedDate("");
     };
+    const handleEdit = (record) => {
+        setEditingRecord(record);
+    };
+    const handleUpdate = async () => {
+        try {
+            const response = await API.patch(
+                `attendance/${editingRecord.id}/`,
+                {
+                    employee: editingRecord.employee,
+                    status: editingRecord.status,
+                    check_in:
+                        editingRecord.status === "Absent" ||
+                        editingRecord.status === "Leave"
+                            ? null: editingRecord.check_in || null,
+                    check_out:
+                        editingRecord.status === "Absent" ||
+                        editingRecord.status === "Leave"
+                            ? null: editingRecord.check_out || null,
+                }
+            );
+            setRecords((prevRecords) =>
+                prevRecords.map((record) =>
+                    record.id === editingRecord.id
+                        ? response.data : record
+                )
+);
+
+            setEditingRecord(null);
+            alert("Attendance updated successfully!");
+        } catch (error) {
+            console.error("Error updating attendance:", error);
+            console.error("Server response:", error.resonse?.data);
+            console.error("Failed to update the attendance.")
+        }
+    };   
+
+    const handleDelete = async (id) => {
+        const confirmDelete = window.confirm(
+            "Are you sure, you want to delete this attendance record?"
+        );       
+        
+
+        if (!confirmDelete) {
+            return;
+        }
+
+        try {
+            await API.delete(`attendance/${id}/`);
+
+            setRecords((prevRecords) => 
+             prevRecords.filter((record) => record.id !== id)
+        );
+        alert ("Attendance record deleted successfully!")
+        } catch (error) {
+            console.error("Error deleting attendance:", error);
+            alert("Failed to delete attendance record.")
+        }
+    };  
+    
+    
     
     return (
         <div className="p-6">
@@ -63,20 +124,17 @@ function Attendance() {
                         <label className="block font-semibold mb-2">
                             Employee
                         </label>
-
-                        <select
-                            value={selectedEmployee}
-                            onChange={(e) => setSelectedEmployee(e.target.value)}
-                            className="w-full border rounded-lg p-3"
-                        >
+                        <select value={selectedEmployee}
+                         onChange={(e) => setSelectedEmployee(e.target.value)}
+                         className="w-full border rounded-lg p-3" >
                             <option value="">All Employees</option>
-
                             {employees.map((employee) => (
                                 <option key={employee.id} value={employee.id}>
                                     {employee.name}
                                 </option>
                             ))}
-                        </select>
+                        </select>    
+
                     </div>
 
                     {/* Status Filter */}
@@ -121,12 +179,112 @@ function Attendance() {
 
                 </div>
             </div>
+            {editingRecord && (
+                <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+                    <h2>Edit Attendance</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block font-semibold mb-2">Employee</label>
+                        <select
+                         value={editingRecord.employee}
+                          onChange={(e) => 
+                            setEditingRecord({
+                                ...editingRecord,
+                                employee: Number(e.target.value),
+                            })
+                          }
+                          className="w-full border rounded-lg p-3">
+                            {employees.map((employee) => (
+                                <option key={employee.id}
+                                 value={employee.id}>
+                                    {employee.name}
+                                 </option>
+                            ))}
+                            
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block font-semibold mb-2">Status</label>
+                        <select
+                         value={editingRecord.status}
+                         onChange={(e) => {
+                            const newStatus = e.target.value;
+                            const clearTimes =
+                                newStatus === "Absent" || newStatus === "Leave";
 
-            {/* Attendance Table */}
-            <AttendanceTable records={filterRecords} />
+                                setEditingRecord({
+                                    ...editingRecord,
+                                    status: newStatus,
+                                    check_in: clearTimes ? "" : editingRecord.check_in || "",
+                                    check_out: clearTimes ? "" : editingRecord.check_out || ","
+                                });                            
+                         }}
+                         className="w-full border rounded-lg p-3">
+                            <option value="Present">Present</option>
+                            <option value="Absent">Absent</option>
+                            <option value="Leave">Leave</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block font-semibold mb-2">
+                            Check-in Time
+                        </label>
+                        <input 
+                         type="time"
+                         value={editingRecord.check_in || ""}
+                         onChange={(e) =>
+                            setEditingRecord({
+                                ...editingRecord,
+                                check_in: e.target.value,
+                            })
+                         }
+                         disabled={
+                            editingRecord.status === "Absent" ||
+                            editingRecord.status === "Leave"
+                         }
+                         className="w-full border rounded-lg p-3 disabled:bg-gray-100 disabled:cursor-not-allowed" />
+                    </div>
+                    <div>
+                        <label>Check-out Time</label>
+                        <input 
+                            type="time"
+                            value={editingRecord.check_out || ""}
+                            onChange={(e) => 
+                            setEditingRecord({
+                            ...editingRecord,
+                            check_out: e.target.value,
+                            })
+                        } 
+                        disabled={
+                            editingRecord.status === "Absent" ||
+                            editingRecord.status === "Leave"
+                        }
+                        className="w-full border rounded-lg p-3 disabled:bg-gray-100 disabled:cursor-not-allowed" />
+                    </div>
 
+                <div className="flex gap-3 mt-5 ">
+                    <button type="button" onClick={handleUpdate}                                 
+                     className="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
+                     Update Attendance
+                    </button>
+
+
+                    <button type="button"
+                        onClick={() => setEditingRecord(null) }
+                         className="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
+                            Cancel
+                    </button>
+                </div>
+                </div>
+                </div>
+            )}  
+            <AttendanceTable records={filterRecords}
+             onEdit = {handleEdit}
+             onDelete = {handleDelete}
+             />   
         </div>
+           
     );
 }
-
 export default Attendance;

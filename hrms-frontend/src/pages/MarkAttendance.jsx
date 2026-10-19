@@ -6,6 +6,8 @@ function MarkAttendance() {
   const [formData, setFormData] = useState({
     employee: "",
     status: "Present",
+    check_in : "",
+    check_out : "",
   });
 
   useEffect(() =>{
@@ -22,11 +24,22 @@ function MarkAttendance() {
   };
 
   const handleChange = (e) => {
+    const {name, value} = e.target;
+
+    if (name === "status" && value === "Absent" || value === "Leave") {
+      setFormData({
+        ...formData,
+        status: value,
+        check_in: "",
+        check_out: "",
+      });
+      return;
+    }
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
-  };
+  };    
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,6 +57,8 @@ function MarkAttendance() {
       setFormData({
         employee: "",
         status: "Present",
+        check_in: "",
+        check_out: "",
       });
     } catch (error) {
         console.log("Error marking attendance:", error);
@@ -80,7 +95,19 @@ function MarkAttendance() {
             <option value="Present">Present</option>
             <option value="Absent">Absent</option>
             <option value="Leave">Leave</option>
-          </select>
+            <option vlaue="Late">Late</option>
+          </select>    
+          <div>
+            <label className="block font-semibold mb-2">Check_in Time</label>
+            <input type="time" name="check_in" value={formData.check_in}
+             onChange={handleChange} disabled={formData.status === "Absent" || formData.status === "Leave"} 
+             className="w-full border rounded-lg p-3" />
+          </div>  
+          <div>
+            <label className="block font-semibold mb-2">Check_out</label>
+            <input type="time" name="check_out" value={formData.check_out}
+             onChange={handleChange} disabled={formData.status === "Absent" || formData.status === "Leave"} 
+             className="w-full border rounded-lg p-3" /></div>             
           </div>
           <button type="submit"
            className="w-full bg-indigo-600 hover:bg-indigo-800 text-white py-3 rounded-lg font-semibold">
@@ -91,6 +118,3 @@ function MarkAttendance() {
   );
 }
 export default MarkAttendance;
-
-          
-       

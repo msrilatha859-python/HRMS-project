@@ -29,20 +29,27 @@ function Dashboard() {
             console.error("Error fetching employees:", error);
         }
      };
+     
 
      const totalEmployees = employees.length;
+    
+     const today = new Date().toISOString().split("T")[0];
+     const todayRecords = records.filter(
+        (record) => record.date === today
+     );
 
-     const present =records.filter(
+     const present = todayRecords.filter(
         (r) => r.status === "Present"
      ).length;
 
-     const absent = records.filter(
-        (r) =>r.status === "Absent"
+     const absent = todayRecords.filter(
+        (r) => r.status === "Absent"
      ).length;
 
-     const leave = records.filter(
-        (r) =>r.status === "Leave"
+     const leave = todayRecords.filter(
+        (r) => r.status === "Leave"
      ).length;
+
     return(
         <div className="p-6">
             <h1 className="text-3xl font-bold mb-6">Attendance Dashboard</h1>
@@ -68,7 +75,7 @@ function Dashboard() {
                 <h2 className="text-xl font-bold mb-4">
                     Today's Attendance
                 </h2>
-                <AttendanceTable records={records} />
+                <AttendanceTable records={todayRecords} />
             </div>
         </div>
     );
