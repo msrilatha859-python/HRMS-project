@@ -25,6 +25,11 @@ function Sidebar() {
                     <FaCalendarCheck/>Attendance
                 </Link>
                 <Link
+                    to="/my-attendance"
+                    className='flex items-center gap-3 p-3 rounded hover-bg-indigo-700' >
+                        <FaUserClock />My Attendance
+                    </Link>
+                <Link
                     to='/attendance/mark'
                     className='flex item-center gap-3 p-3 rounded hover:bg-indigo-700'>
                       <FaUserClock /> Mark Attendance

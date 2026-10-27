@@ -7,6 +7,8 @@ import Attendance from './pages/Attendance';
 import Leave from './pages/Leave';
 import Settings from './pages/Settings';
 import Reports from './pages/Reports';
+import EmployeeAttendance from './pages/EmployeeAttendance';
+
 
 import MainLayout from './layout/MainLayout';
 import AddEmployee from './pages/AddEmployee';
@@ -38,6 +40,9 @@ function Layout() {
           element={<ProtectRoute><MainLayout><EditEmployee /></MainLayout> </ProtectRoute> } />
           <Route path='/attendance/mark'
             element={<ProtectRoute><MainLayout><MarkAttendance/></MainLayout> </ProtectRoute> } />
+           <Route path='/my-attendance'
+            element={<ProtectRoute><MainLayout><EmployeeAttendance /></MainLayout></ProtectRoute> } />
+
           
         </Routes>
 
